@@ -60,11 +60,11 @@ export default function SignUpForm() {
     const fieldsObj = Object.fromEntries(fieldsArray.map(obj => [obj.name, obj.value]));
 
 
-    // if (!emailRegex.test(fieldsObj.email)) {
-    //   setErrorMessage('Please check the "Email" field validity!');
+    if (!emailRegex.test(fieldsObj.email)) {
+      setErrorMessage('Please check the "Email" field validity!');
 
-    //   return;
-    // }
+      return;
+    }
 
     if (fieldsObj.password.length < 6) {
       setErrorMessage('The "Password" field must contain at least 6 characters!');
@@ -78,14 +78,10 @@ export default function SignUpForm() {
       return;
     }
 
-    // console.log(fieldsObj)
-
-    // console.log(addUser)
-
     dispatch(addUser(fieldsObj));
 
-    // event.currentTarget.reset();
-    // setErrorMessage('');
+    event.currentTarget.reset();
+    setErrorMessage('');
   };
 
   return (

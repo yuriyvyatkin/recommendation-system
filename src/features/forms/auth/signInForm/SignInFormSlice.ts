@@ -8,7 +8,7 @@ type User = {
   gender?: string,
   age?: number,
   email: string,
-  password: string,
+  password: object,
   likedItems: Array<string>,
 };
 
@@ -19,7 +19,10 @@ const initialState: Array<User> = [
     gender: 'male',
     age: 23,
     email: 'mike@mail.com',
-    password: 'password123',
+    password: {
+      hash: '593c3ef5925c060ef861f3e5ac3773890dda0360003b03101f6d4fc50f7aec580df47fbe4fe2c9966c8c4a93390d57c83c6b88dc2c094022dd6cb535c8d7e7b1',
+      salt: '4fee1b2e593649872c8f6db5abaa5d2e'
+    }, // password: 123123
     likedItems: [],
   }
 ];
@@ -31,15 +34,14 @@ const signInSlice = createSlice({
     addUser(state, { payload }) {
       const { name, email, gender, age, password } = payload;
       const {hash, salt} = hashPassword(password);
-      console.log(hash)
-      console.log(salt)
+
       state.push({
         id: nanoid(),
         name,
         gender,
         age,
         email,
-        password: password,
+        password: {hash, salt},
         likedItems: [],
       });
     },
