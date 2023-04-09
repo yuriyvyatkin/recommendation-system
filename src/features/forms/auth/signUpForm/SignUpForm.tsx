@@ -14,8 +14,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../../copyright/Copyright';
 import {
@@ -43,12 +41,12 @@ export default function SignUpForm() {
     event.preventDefault();
 
     const inputs = event.currentTarget.querySelectorAll('input');
-    const fieldsArray: Array<Field> = [];
+    let fields: any = [];
     inputs.forEach((item) => {
-      fieldsArray.push({name: item.name, value: item.value});
+      fields.push({name: item.name, value: item.value});
     });
 
-    const emptyField = fieldsArray.find((field) => field.value === '');
+    const emptyField = fields.find((field: Field) => field.value === '');
 
     if (emptyField) {
       const emptyFieldName = emptyField.name.charAt(0).toUpperCase() + emptyField.name.slice(1);
@@ -57,28 +55,27 @@ export default function SignUpForm() {
       return;
     }
 
-    const fieldsObj = Object.fromEntries(fieldsArray.map(obj => [obj.name, obj.value]));
+    fields = Object.fromEntries(fields.map((field: Field) => [field.name, field.value]));
 
-
-    if (!emailRegex.test(fieldsObj.email)) {
+    if (!emailRegex.test(fields.email)) {
       setErrorMessage('Please check the "Email" field validity!');
 
       return;
     }
 
-    if (fieldsObj.password.length < 6) {
+    if (fields.password.length < 6) {
       setErrorMessage('The "Password" field must contain at least 6 characters!');
 
       return;
     }
 
-    if (+fieldsObj.age < 5 || +fieldsObj.age > 120) {
+    if (+fields.age < 5 || +fields.age > 120) {
       setErrorMessage('Please fill in the "Age" field with a value between 5 and 120 inclusive!');
 
       return;
     }
 
-    dispatch(addUser(fieldsObj));
+    dispatch(addUser(fields));
 
     event.currentTarget.reset();
     setErrorMessage('');
@@ -104,7 +101,7 @@ export default function SignUpForm() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth

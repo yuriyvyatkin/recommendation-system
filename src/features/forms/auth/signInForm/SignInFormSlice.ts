@@ -5,10 +5,13 @@ import { hashPassword } from "hashed-password";
 type User = {
   id: string,
   name: string,
-  gender?: string,
-  age?: number,
+  gender: string,
+  age: number,
   email: string,
-  password: object,
+  password: {
+    salt: string;
+    hash: string;
+  },
   likedItems: Array<string>,
 };
 
@@ -41,7 +44,7 @@ const signInSlice = createSlice({
         gender,
         age,
         email,
-        password: {hash, salt},
+        password: { hash, salt },
         likedItems: [],
       });
     },
