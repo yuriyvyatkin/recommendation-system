@@ -11,8 +11,8 @@ function App() {
       /* <AdminForm />
       <SearchBar />
       <Tile /> */
-      // <SignUpForm />
-      <SignInForm />
+      <SignUpForm />
+      // <SignInForm />
       // <Album />
     // </div>
   );

@@ -24,14 +24,15 @@ export default function SignInForm() {
 
   type User = {
     id: string,
-    name: string,
-    gender: string,
-    age: number,
+    name?: string,
+    gender?: string,
+    age?: number,
     email: string,
     password: {
       salt: string;
       hash: string;
     },
+    role: string;
   };
 
   type State = {

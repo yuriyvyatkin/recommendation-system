@@ -13,9 +13,23 @@ type User = {
     hash: string;
   },
   likedItems: Array<string>,
+  role: string;
 };
 
 const initialState: Array<User> = [
+  {
+    id: nanoid(),
+    name: 'John',
+    gender: 'male',
+    age: 32,
+    email: 'john@mail.com',
+    password: {
+      hash: '593c3ef5925c060ef861f3e5ac3773890dda0360003b03101f6d4fc50f7aec580df47fbe4fe2c9966c8c4a93390d57c83c6b88dc2c094022dd6cb535c8d7e7b1',
+      salt: '4fee1b2e593649872c8f6db5abaa5d2e'
+    }, // password: 123123
+    likedItems: [],
+    role: 'admin',
+  },
   {
     id: nanoid(),
     name: 'Mike',
@@ -27,6 +41,7 @@ const initialState: Array<User> = [
       salt: '4fee1b2e593649872c8f6db5abaa5d2e'
     }, // password: 123123
     likedItems: [],
+    role: 'user',
   }
 ];
 
@@ -46,6 +61,7 @@ const signInSlice = createSlice({
         email,
         password: { hash, salt },
         likedItems: [],
+        role: 'user',
       });
     },
     updateUserProfileInfo(state, { payload }) {
@@ -59,6 +75,7 @@ const signInSlice = createSlice({
         email: state[index].email,
         password: state[index].password,
         likedItems: state[index].likedItems,
+        role: 'user',
       };
     },
     addLikedItem(state, { payload }) {
