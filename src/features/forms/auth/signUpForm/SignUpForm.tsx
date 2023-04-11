@@ -86,7 +86,7 @@ export default function SignUpForm() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  {...register("name", { required: true, maxLength: 35 })}
+                  {...register("name", { required: true, minLength: 3, maxLength: 35 })}
                   required
                   fullWidth
                   label="Name"
@@ -131,7 +131,7 @@ export default function SignUpForm() {
               {errorMessages.gender}
               <Grid item xs={12}>
                 <TextField
-                  {...register("email", { required: true, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
+                  {...register("email", { required: true, minLength: 7, maxLength: 254, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
                   required
                   fullWidth
                   label="Email"
@@ -141,12 +141,13 @@ export default function SignUpForm() {
               {errorMessages.email}
               <Grid item xs={12}>
                 <TextField
-                  {...register("password", { required: true })}
+                  {...register("password", { required: true, maxLength: 251, pattern: /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/ })}
                   required
                   fullWidth
                   label="Password"
                   type="password"
                   autoComplete="new-password"
+                  helperText="minimum of 6 characters, at least 1 number, 1 uppercase and 1 lowercase letter with no spaces"
                 />
               </Grid>
               {errorMessages.password}
