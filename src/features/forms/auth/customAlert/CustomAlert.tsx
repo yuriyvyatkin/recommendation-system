@@ -2,7 +2,7 @@ import Alert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import getCapitalizedWord from "../../../helpers/getCapitalizedWord";
 
-export default function CustomAlert({ name, type }: { name: string, type: string }) {
+export default function CustomAlert({ name, type }: { name: string | undefined, type: string }) {
   let alertName = type;
   let capitalizedName = getCapitalizedWord(name);
 

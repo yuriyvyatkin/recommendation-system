@@ -27,7 +27,6 @@ const theme = createTheme();
 export default function SignUpForm() {
   const [num, setNum] = useState('18');
   const [gender, setGender] = useState('');
-  const [toggle, setToggle] = useState(false);
   const dispatch = useAppDispatch();
   const { register, handleSubmit, reset, formState: { errors }, } = useForm<FormValues>();
 
@@ -39,12 +38,7 @@ export default function SignUpForm() {
     password: string;
   }
 
-  // console.log(gender)
-  // console.log(errors.gender)
-
   const submitForm: SubmitHandler<FormValues> = (data) => {
-    // console.log(data);
-
     // dispatch(addUser(data));
 
     reset();
@@ -59,6 +53,10 @@ export default function SignUpForm() {
   };
 
   if (errors) {
+    if (gender) {
+      delete errors.gender;
+    }
+
     for (const fieldName in errors) {
       Object.defineProperty(errorMessages, fieldName, {
         value: (<CustomAlert name={fieldName} type={errors[fieldName as keyof typeof errors]?.type as string} />),
@@ -115,18 +113,10 @@ export default function SignUpForm() {
                 <FormControl fullWidth required>
                   <InputLabel id="gender">Gender</InputLabel>
                   <Select
-                    {...register("gender", { required: true, onChange: (event: SelectChangeEvent<string>) => {
-                      setGender(event.target.value)
-                      setGender(event.target.value)
-                      setGender(event.target.value)
-                      setGender(event.target.value)
-                    } })}
+                    {...register("gender", { required: true, onChange: (event: SelectChangeEvent<string>) => setGender(event.target.value) })}
                     value={gender}
                     labelId="gender"
                     id="gender"
-                    open={toggle}
-                    onClose={() => setToggle(!toggle)}
-                    onOpen={() => setToggle(!toggle)}
                     label="Gender"
                   >
                     <MenuItem value="">
