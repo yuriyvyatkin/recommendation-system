@@ -2,7 +2,7 @@ import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   changeRecommendationsField,
   resetRecommendations
-} from './RecommendationsSlice';
+} from './recommendationsSlice';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';

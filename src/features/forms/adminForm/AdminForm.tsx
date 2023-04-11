@@ -18,7 +18,7 @@ import {
 import {
   completeOperation,
   changeItemField,
-} from './AdminFormSlice';
+} from './adminFormSlice';
 
 export default function AdminForm() {
   type State = {

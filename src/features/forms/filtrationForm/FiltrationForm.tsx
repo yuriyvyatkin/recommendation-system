@@ -18,7 +18,7 @@ import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   changeMenus,
   resetMenus
-} from './FiltrationFormSlice';
+} from './filtrationFormSlice';
 
 export default function FiltrationForm() {
   type FiltrationForm = {

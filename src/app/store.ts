@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import AdminFormSlice from '../features/forms/adminForm/AdminFormSlice';
-import FiltrationForm from '../features/forms/filtrationForm/FiltrationFormSlice';
+import AdminFormSlice from '../features/forms/adminForm/adminFormSlice';
+import FiltrationForm from '../features/forms/filtrationForm/filtrationFormSlice';
 import searchBarSlice from '../features/forms/searchBar/searchBarSlice';
-import recommendationsSlice from '../features/forms/recommendations/RecommendationsSlice';
+import recommendationsSlice from '../features/forms/recommendations/recommendationsSlice';
 import tileSlice from '../features/tile/tileSlice';
-import signInFormSlice from '../features/forms/auth/signInForm/SignInFormSlice';
+import signInFormSlice from '../features/forms/auth/signInForm/signInFormSlice';
 
 const reducer = {
   adminForm: AdminFormSlice,

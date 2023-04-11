@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid';
 import TileItem from './tileItem/TileItem';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { removeItem } from './tileSlice';
-import { editItem } from '../forms/adminForm/AdminFormSlice';
+import { editItem } from '../forms/adminForm/adminFormSlice';
 import Alert from '@mui/material/Alert';
 
 export default function Tile() {

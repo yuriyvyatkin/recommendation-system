@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Alert from '@mui/material/Alert';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -18,68 +17,54 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../../copyright/Copyright';
 import {
   addUser
-} from '../signInForm/SignInFormSlice';
+} from '../signInForm/signInFormSlice';
+import CustomAlert from '../customAlert/CustomAlert';
 import { useAppDispatch } from '../../../../app/hooks';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 const theme = createTheme();
 
 export default function SignUpForm() {
-  const [errorMessage, setErrorMessage] = useState("");
   const [num, setNum] = useState('18');
   const [gender, setGender] = useState('');
   const [toggle, setToggle] = useState(false);
   const dispatch = useAppDispatch();
+  const { register, handleSubmit, reset, formState: { errors }, } = useForm<FormValues>();
 
-  type Field = {
+  type FormValues = {
     name: string;
-    value: string;
+    age: string;
+    gender: string;
+    email: string;
+    password: string;
   }
 
-  const emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+  // console.log(gender)
+  // console.log(errors.gender)
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitForm: SubmitHandler<FormValues> = (data) => {
+    // console.log(data);
 
-    const inputs = event.currentTarget.querySelectorAll('input');
-    let fields: any = [];
-    inputs.forEach((item) => {
-      fields.push({name: item.name, value: item.value});
-    });
+    // dispatch(addUser(data));
 
-    const emptyField = fields.find((field: Field) => field.value === '');
-
-    if (emptyField) {
-      const emptyFieldName = emptyField.name.charAt(0).toUpperCase() + emptyField.name.slice(1);
-      setErrorMessage(`Field "${emptyFieldName}" is required and should contain the correct value!`);
-
-      return;
-    }
-
-    fields = Object.fromEntries(fields.map((field: Field) => [field.name, field.value]));
-
-    if (!emailRegex.test(fields.email)) {
-      setErrorMessage('Please check the "Email" field validity!');
-
-      return;
-    }
-
-    if (fields.password.length < 6) {
-      setErrorMessage('The "Password" field must contain at least 6 characters!');
-
-      return;
-    }
-
-    if (+fields.age < 5 || +fields.age > 120) {
-      setErrorMessage('Please fill in the "Age" field with a value between 5 and 120 inclusive!');
-
-      return;
-    }
-
-    dispatch(addUser(fields));
-
-    event.currentTarget.reset();
-    setErrorMessage('');
+    reset();
   };
+
+  const errorMessages = {
+    name: null,
+    age: null,
+    gender: null,
+    email: null,
+    password: null,
+  };
+
+  if (errors) {
+    for (const fieldName in errors) {
+      Object.defineProperty(errorMessages, fieldName, {
+        value: (<CustomAlert name={fieldName} type={errors[fieldName as keyof typeof errors]?.type as string} />),
+      });
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -99,44 +84,50 @@ export default function SignUpForm() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit(submitForm)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+                  {...register("name", { required: true, maxLength: 35 })}
                   required
                   fullWidth
                   label="Name"
-                  name="name"
                   autoFocus
                   autoComplete="given-name"
                 />
               </Grid>
+              {errorMessages.name}
               <Grid item xs={12}>
                 <TextField
+                  {...register("age", { required: true, min: 5, max: 120, onChange: (event: React.ChangeEvent<HTMLInputElement>) => setNum(event.target.value) })}
+                  value={num}
                   required
                   fullWidth
-                  name="age"
                   label="Age"
                   type="number"
-                  variant="outlined"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNum(e.target.value)}
-                  value={num}
-                  InputProps={{ inputProps: { min: 5, max: 120 } }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               </Grid>
+              {errorMessages.age}
               <Grid item xs={12}>
                 <FormControl fullWidth required>
                   <InputLabel id="gender">Gender</InputLabel>
                   <Select
+                    {...register("gender", { required: true, onChange: (event: SelectChangeEvent<string>) => {
+                      setGender(event.target.value)
+                      setGender(event.target.value)
+                      setGender(event.target.value)
+                      setGender(event.target.value)
+                    } })}
+                    value={gender}
                     labelId="gender"
                     id="gender"
-                    name="gender"
                     open={toggle}
                     onClose={() => setToggle(!toggle)}
                     onOpen={() => setToggle(!toggle)}
-                    value={gender}
                     label="Gender"
-                    onChange={(event: SelectChangeEvent<typeof gender>) => setGender(event.target.value)}
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -147,32 +138,28 @@ export default function SignUpForm() {
                   </Select>
                 </FormControl>
               </Grid>
+              {errorMessages.gender}
               <Grid item xs={12}>
                 <TextField
+                  {...register("email", { required: true, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
                   required
                   fullWidth
                   label="Email"
-                  name="email"
                   autoComplete="email"
                 />
               </Grid>
+              {errorMessages.email}
               <Grid item xs={12}>
                 <TextField
+                  {...register("password", { required: true })}
                   required
                   fullWidth
-                  name="password"
                   label="Password"
                   type="password"
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                {
-                  errorMessage
-                    ? <Alert severity="warning"> {errorMessage} </Alert>
-                    : <Alert severity="info">* — required fields</Alert>
-                }
-              </Grid>
+              {errorMessages.password}
             </Grid>
             <Button
               type="submit"

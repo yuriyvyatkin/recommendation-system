@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { faker } from '@faker-js/faker';
 import { createSlice } from '@reduxjs/toolkit';
+import getCapitalizedWord from '../helpers/getCapitalizedWord';
 
 type Item = {
   id: string,
@@ -18,11 +19,6 @@ type Item = {
 };
 
 const initialState: Array<Item> = [];
-
-function getCapitalizedWord(word: string) {
-  const capitalizedWord = word.charAt(0).toUpperCase() + word.slice(1);
-  return capitalizedWord;
-}
 
 function getRandomYear(min: number, max: number): string {
   return String(Math.trunc(Math.random() * (max - min) + min));
