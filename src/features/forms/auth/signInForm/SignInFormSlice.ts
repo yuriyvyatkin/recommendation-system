@@ -24,9 +24,9 @@ const initialState: Array<User> = [
     age: 32,
     email: 'john@mail.com',
     password: {
-      hash: '593c3ef5925c060ef861f3e5ac3773890dda0360003b03101f6d4fc50f7aec580df47fbe4fe2c9966c8c4a93390d57c83c6b88dc2c094022dd6cb535c8d7e7b1',
-      salt: '4fee1b2e593649872c8f6db5abaa5d2e'
-    }, // password: 123123
+      hash: '183e93b815f6b1c73dd0d321745c7086d0e6cf5853fef39492c6f388c145b39e01f1496e7d2b41cef196e0bcf24735fa2f50ee19a176aad855d2d0968d43d59b',
+      salt: 'f88fad545c2058c5e5b9e6492f1fac05'
+    }, // password: 123123Aa
     likedItems: [],
     role: 'admin',
   },
@@ -37,9 +37,9 @@ const initialState: Array<User> = [
     age: 23,
     email: 'mike@mail.com',
     password: {
-      hash: '593c3ef5925c060ef861f3e5ac3773890dda0360003b03101f6d4fc50f7aec580df47fbe4fe2c9966c8c4a93390d57c83c6b88dc2c094022dd6cb535c8d7e7b1',
-      salt: '4fee1b2e593649872c8f6db5abaa5d2e'
-    }, // password: 123123
+      hash: '183e93b815f6b1c73dd0d321745c7086d0e6cf5853fef39492c6f388c145b39e01f1496e7d2b41cef196e0bcf24735fa2f50ee19a176aad855d2d0968d43d59b',
+      salt: 'f88fad545c2058c5e5b9e6492f1fac05'
+    }, // password: 123123Aa
     likedItems: [],
     role: 'user',
   }

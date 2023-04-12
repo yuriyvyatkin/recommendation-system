@@ -22,7 +22,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 const theme = createTheme();
 
 export default function SignInForm() {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
+  const { register, handleSubmit, reset, setError, formState: { errors } } = useForm<FormValues>();
 
   type FormValues = {
     email: string;
@@ -56,17 +56,20 @@ export default function SignInForm() {
   // const users: Array<User> = useAppSelector((state: State) => state.users.map((user: User) => {user.id, user.name, user.email, user.password}));
 
   const submitForm: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+    const index = users.findIndex(user => {
+      if (user.email === data.email && validatePassword(data.password, user.password.salt, user.password.hash)) {
+        return true;
+      }
 
-    // const index = users.findIndex(user => {
-    //   if (user.email === data.email && validatePassword(data.password, user.password.salt, user.password.hash)) {
-    //     return true;
-    //   }
+      return false;
+    });
 
-    //   return false;
-    // });
+    if (index === -1) {
+      setError('password', { type: 'pattern' }, { shouldFocus: true });
+    } else {
 
-    // reset();
+      // reset();
+    }
   };
 
   const errorMessages = {
@@ -101,10 +104,10 @@ export default function SignInForm() {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
-              <Grid container spacing={2}>
+              <Grid container>
                 <Grid item xs={12}>
                   <TextField
-                    {...register("email", { required: true, minLength: 7, maxLength: 254, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
+                    {...register("email", { required: true, minLength: 7, maxLength: 80, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
                     required
                     margin="normal"
                     fullWidth
@@ -116,7 +119,7 @@ export default function SignInForm() {
                 {errorMessages.email}
                 <Grid item xs={12}>
                   <TextField
-                    {...register("password", { required: true, minLength: 6, maxLength: 251, pattern: /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/ })}
+                    {...register("password", { required: true, minLength: 6, maxLength: 16, pattern: /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/ })}
                     required
                     margin="normal"
                     fullWidth

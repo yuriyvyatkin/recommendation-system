@@ -131,7 +131,7 @@ export default function SignUpForm() {
               {errorMessages.gender}
               <Grid item xs={12}>
                 <TextField
-                  {...register("email", { required: true, minLength: 7, maxLength: 254, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
+                  {...register("email", { required: true, minLength: 7, maxLength: 80, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
                   required
                   fullWidth
                   label="Email"
@@ -141,7 +141,7 @@ export default function SignUpForm() {
               {errorMessages.email}
               <Grid item xs={12}>
                 <TextField
-                  {...register("password", { required: true, maxLength: 251, pattern: /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/ })}
+                  {...register("password", { required: true, minLength: 7, maxLength: 16, pattern: /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/ })}
                   required
                   fullWidth
                   label="Password"
