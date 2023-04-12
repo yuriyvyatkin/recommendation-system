@@ -28,7 +28,7 @@ export default function SignUpForm() {
   const [num, setNum] = useState('18');
   const [gender, setGender] = useState('');
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, reset, formState: { errors }, } = useForm<FormValues>();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
 
   type FormValues = {
     name: string;

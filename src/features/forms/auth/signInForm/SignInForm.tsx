@@ -14,13 +14,20 @@ import Container from '@mui/material/Container';
 import Alert from '@mui/material/Alert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../../copyright/Copyright';
+import CustomAlert from '../customAlert/CustomAlert';
 import { useAppSelector } from '../../../../app/hooks';
 import { validatePassword } from "hashed-password";
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 const theme = createTheme();
 
 export default function SignInForm() {
-  const [errorMessage, setErrorMessage] = useState("");
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
+
+  type FormValues = {
+    email: string;
+    password: string;
+  }
 
   type User = {
     id: string,
@@ -47,40 +54,33 @@ export default function SignInForm() {
 
   const users: Array<User> = useAppSelector((state: State) => state.users.slice());
   // const users: Array<User> = useAppSelector((state: State) => state.users.map((user: User) => {user.id, user.name, user.email, user.password}));
-  const emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const fields: Fields = {
-      email: data.get('email') as string,
-      password: data.get('password') as string,
-      remember: data.get('remember') ?? '',
-    };
+  const submitForm: SubmitHandler<FormValues> = (data) => {
+    console.log(data);
 
-    // if (fields.email || !emailRegex.test(fields.email)) {
-    //   setErrorMessage(`Field "Email" is required and should contain the correct value!`);
+    // const index = users.findIndex(user => {
+    //   if (user.email === data.email && validatePassword(data.password, user.password.salt, user.password.hash)) {
+    //     return true;
+    //   }
 
-    //   return;
-    // }
+    //   return false;
+    // });
 
-    // if (fields.password || fields.password.length < 6) {
-    //   setErrorMessage(`Field "Password" is required and should contain the correct value!`);
-
-    //   return;
-    // }
-
-    const index = users.findIndex(user => {
-      if (user.email === fields.email && validatePassword(fields.password, user.password.salt, user.password.hash)) {
-        return true;
-      }
-
-      return false;
-    });
-
-    // event.currentTarget.reset();
-    // setErrorMessage('');
+    // reset();
   };
+
+  const errorMessages = {
+    email: null,
+    password: null,
+  };
+
+  if (errors) {
+    for (const fieldName in errors) {
+      Object.defineProperty(errorMessages, fieldName, {
+        value: (<CustomAlert name={fieldName} type={errors[fieldName as keyof typeof errors]?.type as string} />),
+      });
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,36 +100,32 @@ export default function SignInForm() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
+                    {...register("email", { required: true, minLength: 7, maxLength: 254, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
+                    required
                     margin="normal"
                     fullWidth
-                    id="email"
                     label="Email"
-                    name="email"
                     autoComplete="email"
                     autoFocus
                   />
                 </Grid>
+                {errorMessages.email}
                 <Grid item xs={12}>
                   <TextField
+                    {...register("password", { required: true, minLength: 6, maxLength: 251, pattern: /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/ })}
+                    required
                     margin="normal"
                     fullWidth
-                    name="password"
                     label="Password"
                     type="password"
-                    id="password"
                     autoComplete="current-password"
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  {
-                    errorMessage
-                      && <Alert severity="warning"> {errorMessage} </Alert>
-                  }
-                </Grid>
+                {errorMessages.password}
               </Grid>
             <FormControlLabel
               control={<Checkbox name="remember" value="remember" color="primary" />}

@@ -13,6 +13,9 @@ export default function CustomAlert({ name, type }: { name: string | undefined, 
     case 'maxLength':
       alertName = `Exceeded the maximum length of the "${capitalizedName}" field!`;
       break;
+    case 'minLength':
+      alertName = `Not enough characters in the "${capitalizedName}" field!`;
+      break;
     case 'max':
       alertName = `Exceeded the maximum number in the "${capitalizedName}" field!`;
       break;
