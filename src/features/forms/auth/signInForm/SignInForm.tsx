@@ -46,12 +46,6 @@ export default function SignInForm() {
     users: Array<User>;
   };
 
-  type Fields = {
-    email: string;
-    password: string;
-    remember: FormDataEntryValue | string;
-  }
-
   const users: Array<User> = useAppSelector((state: State) => state.users.slice());
   // const users: Array<User> = useAppSelector((state: State) => state.users.map((user: User) => {user.id, user.name, user.email, user.password}));
 

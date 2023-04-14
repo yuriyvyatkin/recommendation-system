@@ -8,22 +8,22 @@ export default function CustomAlert({ name, type }: { name: string | undefined, 
 
   switch (type) {
     case 'required':
-      alertName = `The field "${capitalizedName}" is required!`;
+      alertName = `Required field "${capitalizedName}" is missing!`;
       break;
     case 'maxLength':
-      alertName = `Exceeded the maximum length of the "${capitalizedName}" field!`;
+      alertName = `${capitalizedName} is too long!`;
       break;
     case 'minLength':
-      alertName = `Not enough characters in the "${capitalizedName}" field!`;
+      alertName = `${capitalizedName} is too short!`;
       break;
     case 'max':
-      alertName = `Exceeded the maximum number in the "${capitalizedName}" field!`;
+      alertName = `${capitalizedName} exceeds the maximum limit!`;
       break;
     case 'min':
-      alertName = `The number in the "${capitalizedName}" field is below the allowed value!`;
+      alertName = `${capitalizedName} below the minimum limit!`;
       break;
     case 'pattern':
-      alertName = `Check the correctness of the value in the "${capitalizedName}" field!`;
+      alertName = `${capitalizedName} format is incorrect!`;
       break;
     default:
       alertName = 'Unknown error!';
