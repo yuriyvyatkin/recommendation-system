@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import Alert from '@mui/material/Alert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../../../copyright/Copyright';
-import CustomAlert from '../customAlert/CustomAlert';
+import CustomAlert from '../../customAlert/CustomAlert';
 import { useAppSelector } from '../../../../app/hooks';
 import { validatePassword } from "hashed-password";
 import { useForm, SubmitHandler } from 'react-hook-form';

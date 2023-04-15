@@ -51,11 +51,7 @@ const tileSlice = createSlice({
       state.push({ id: nanoid(), name, author, image, album, genre, year, file, likesNumber: 0 });
     },
     addItemChanges(state, { payload }) {
-      const { index, name, author, image, album, genre, year } = payload;
-      let file = payload;
-      if (file.name === '') {
-        file = state[index].file;
-      }
+      const { index, name, author, image, album, genre, year, file } = payload;
       state[index] = {
         id: state[index].id,
         name,

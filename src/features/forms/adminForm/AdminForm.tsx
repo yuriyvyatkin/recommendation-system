@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useEffect, ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import FormControl from '@mui/material/FormControl';
@@ -7,9 +7,9 @@ import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
-import Alert from '@mui/material/Alert';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Typography from '@mui/material/Typography';
+import CustomAlert from '../customAlert/CustomAlert';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import {
@@ -42,9 +42,11 @@ export default function AdminForm() {
   };
 
   const form = useAppSelector((state: State) => state.adminForm);
-  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    reset(form);
+  }, [form]);
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormValues>();
 
   type FormValues = {
     name: string;
@@ -71,9 +73,9 @@ export default function AdminForm() {
     return xhr.responseText.startsWith('<!');
   }
 
-  // function handleInputChange({ target: { name, value } }: { target: { name: string; value: string }}) {
-  //   dispatch(changeItemField({ name, value }));
-  // }
+  function handleInputChange({ target: { name, value } }: { target: { name: string; value: string }}) {
+    dispatch(changeItemField({ name, value }));
+  }
 
   function handleInputFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.item(0);
@@ -85,17 +87,38 @@ export default function AdminForm() {
         URL: URL.createObjectURL(file),
       }
 
-      return { name, value };
-
-      // dispatch(changeItemField({ name, value }));
+      dispatch(changeItemField({ name, value }));
     }
   }
 
   const submitForm: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+    if (form.editingMode.state) {
+      const { index } = form.editingMode;
 
-    // reset();
+      dispatch(addItemChanges({ index, ...data }));
+    } else {
+      dispatch(addItem(data))
+    }
+
+    dispatch(completeOperation());
   };
+
+  const errorMessages = {
+    name: null,
+    author: null,
+    image: null,
+    album: null,
+    genre: null,
+    year: null,
+  };
+
+  if (errors) {
+    for (const fieldName in errors) {
+      Object.defineProperty(errorMessages, fieldName, {
+        value: (<CustomAlert name={fieldName} type={errors[fieldName as keyof typeof errors]?.type as string} />),
+      });
+    }
+  }
 
   return (
     <Box
@@ -104,46 +127,9 @@ export default function AdminForm() {
       autoComplete="off"
       sx={{ mb: '50px' }}
       onSubmit={handleSubmit(submitForm)}
-      // onSubmit={(event) => {
-      //   event.preventDefault();
-      //   const { name, author, image, album, genre, year, file } = form;
 
-      //   const emptyField = Object.entries(form).find((item) => item[1] === '');
-
-      //   if (emptyField) {
-      //     const emptyFieldName = emptyField[0].charAt(0).toUpperCase() + emptyField[0].slice(1);
-      //     setErrorMessage(`Field "${emptyFieldName}" is required and cannot be empty!`);
-
-      //     return;
-      //   }
-
-      //   if (checkLinkIsInvalid(image)) {
-      //     setErrorMessage('Please check the URL image field validity!');
-
-      //     return;
-      //   }
-
-      //   if (!/^20[0-2][0-9]$/.test(year)) {
-      //     setErrorMessage('Please check the "Year" field for correctness! It should be between 2000 and 2019 inclusive.');
-
-      //     return;
-      //   }
-
-      //   if (form.editingMode.state) {
-      //     const { index } = form.editingMode;
-
-      //     dispatch(addItemChanges({ index, name, author, image, album, genre, year, file }));
-      //   } else {
-      //     dispatch(addItem({ name, author, image, album, genre, year, file }))
-      //   }
-
-      //   dispatch(completeOperation());
-      // }}
-
-      onReset={(event) => {
-        reset();
-
-        dispatch(completeOperation());
+      onReset={() => {
+         dispatch(completeOperation());
       }}
     >
       <Grid container spacing={3}>
@@ -160,66 +146,72 @@ export default function AdminForm() {
           <FormControl required>
             <InputLabel htmlFor="name">Name</InputLabel>
             <Input
-              {...register("name", { required: true })}
+              {...register("name", { required: true, onChange: handleInputChange })}
               id="name"
               value={form.name}
               placeholder="The Simpsons"
             />
+            {errorMessages.name}
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
           <FormControl required>
             <InputLabel htmlFor="author">Author</InputLabel>
             <Input
-              {...register("author", { required: true })}
+              {...register("author", { required: true, onChange: handleInputChange })}
               id="author"
               value={form.author}
               placeholder="Matt Groening"
             />
+            {errorMessages.author}
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
           <FormControl required>
             <InputLabel htmlFor="image">Image</InputLabel>
             <Input
-              {...register("image", { required: true, pattern: /^(https?:\/\/)?[0-9a-z-_]*(\.[0-9a-z-_]+)*(\.[a-z]+)+(\/[0-9a-z-_]*)*?\/?$/i })}
+              {...register("image", { required: true, pattern: /https?:\/\/(www.)?[a-zA-Z]+(\.[a-zA-Z]+)+(\/(\w|[-_%.#?=&+])+)+/, onChange: handleInputChange })}
               id="image"
               value={form.image}
               placeholder="https://picsum.photos/"
             />
+            {errorMessages.image}
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
           <FormControl required>
             <InputLabel htmlFor="album">Album / Category</InputLabel>
             <Input
-              {...register("album", { required: true })}
+              {...register("album", { required: true, onChange: handleInputChange })}
               id="album"
               value={form.album}
               placeholder="Health"
             />
+            {errorMessages.album}
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
           <FormControl required>
             <InputLabel htmlFor="genre">Genre</InputLabel>
             <Input
-              {...register("genre", { required: true })}
+              {...register("genre", { required: true, onChange: handleInputChange })}
               id="genre"
               value={form.genre}
               placeholder="Science fiction"
             />
+            {errorMessages.genre}
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
           <FormControl required>
             <InputLabel htmlFor="year">Release year</InputLabel>
             <Input
-              {...register("year", { required: true, pattern: /^19\d{2}$|^20[01][0-9]$|^202[0-3]$/ })}
+              {...register("year", { required: true, pattern: /^19\d{2}$|^20[01][0-9]$|^202[0-3]$/, onChange: handleInputChange })}
               id="year"
               value={form.year}
               placeholder="2000"
             />
+            {errorMessages.year}
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -238,13 +230,6 @@ export default function AdminForm() {
           {
             form.editingMode.state
             && <Button sx={{ ml: '20px' }} type="reset" variant="outlined" color="error" startIcon={<ClearAllIcon />}>Reset</Button>
-          }
-        </Grid>
-        <Grid item xs={12}>
-          {
-            errorMessage
-              ? <Alert severity="warning"> {errorMessage} </Alert>
-              : <Alert severity="info">* — required fields</Alert>
           }
         </Grid>
       </Grid>

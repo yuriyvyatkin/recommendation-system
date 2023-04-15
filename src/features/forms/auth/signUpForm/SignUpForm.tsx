@@ -18,7 +18,7 @@ import Copyright from '../../../copyright/Copyright';
 import {
   addUser
 } from '../signInForm/signInFormSlice';
-import CustomAlert from '../customAlert/CustomAlert';
+import CustomAlert from '../../customAlert/CustomAlert';
 import { useAppDispatch } from '../../../../app/hooks';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
