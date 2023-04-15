@@ -8,14 +8,13 @@ import SignInForm from './features/forms/auth/signInForm/SignInForm';
 function App() {
   return (
     // <div className="App">
-    //   <AdminForm />
-    //   <SearchBar />
-    //   <Tile />
     //   <SignUpForm />
     //   <SignInForm />
     //   <Album />
     // </div>
-    <SignInForm />
+    <div className="App">
+      <Album />
+    </div>
   );
 }
 

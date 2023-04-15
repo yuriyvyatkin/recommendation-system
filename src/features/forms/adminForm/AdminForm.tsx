@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Typography from '@mui/material/Typography';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import {
   addItem,
   addItemChanges,
@@ -43,6 +44,20 @@ export default function AdminForm() {
   const form = useAppSelector((state: State) => state.adminForm);
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useAppDispatch();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
+
+  type FormValues = {
+    name: string;
+    author: string;
+    image: string;
+    album: string;
+    genre: string;
+    year: string;
+    file: {
+      name: string;
+      URL: string;
+    }
+  }
 
   function checkLinkIsInvalid(url: string) {
     var xhr = new XMLHttpRequest();
@@ -56,9 +71,9 @@ export default function AdminForm() {
     return xhr.responseText.startsWith('<!');
   }
 
-  function handleInputChange({ target: { name, value } }: { target: { name: string; value: string }}) {
-    dispatch(changeItemField({ name, value }));
-  }
+  // function handleInputChange({ target: { name, value } }: { target: { name: string; value: string }}) {
+  //   dispatch(changeItemField({ name, value }));
+  // }
 
   function handleInputFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.item(0);
@@ -70,9 +85,17 @@ export default function AdminForm() {
         URL: URL.createObjectURL(file),
       }
 
-      dispatch(changeItemField({ name, value }));
+      return { name, value };
+
+      // dispatch(changeItemField({ name, value }));
     }
   }
+
+  const submitForm: SubmitHandler<FormValues> = (data) => {
+    console.log(data);
+
+    // reset();
+  };
 
   return (
     <Box
@@ -80,45 +103,45 @@ export default function AdminForm() {
       noValidate
       autoComplete="off"
       sx={{ mb: '50px' }}
-      onSubmit={(event) => {
-        event.preventDefault();
-        const { name, author, image, album, genre, year, file } = form;
+      onSubmit={handleSubmit(submitForm)}
+      // onSubmit={(event) => {
+      //   event.preventDefault();
+      //   const { name, author, image, album, genre, year, file } = form;
 
-        const emptyField = Object.entries(form).find((item) => item[1] === '');
+      //   const emptyField = Object.entries(form).find((item) => item[1] === '');
 
-        if (emptyField) {
-          const emptyFieldName = emptyField[0].charAt(0).toUpperCase() + emptyField[0].slice(1);
-          setErrorMessage(`Field "${emptyFieldName}" is required and cannot be empty!`);
+      //   if (emptyField) {
+      //     const emptyFieldName = emptyField[0].charAt(0).toUpperCase() + emptyField[0].slice(1);
+      //     setErrorMessage(`Field "${emptyFieldName}" is required and cannot be empty!`);
 
-          return;
-        }
+      //     return;
+      //   }
 
-        if (checkLinkIsInvalid(image)) {
-          setErrorMessage('Please check the URL image field validity!');
+      //   if (checkLinkIsInvalid(image)) {
+      //     setErrorMessage('Please check the URL image field validity!');
 
-          return;
-        }
+      //     return;
+      //   }
 
-        if (!/^20[0-2][0-9]$/.test(year)) {
-          setErrorMessage('Please check the "Year" field for correctness! It should be between 2000 and 2019 inclusive.');
+      //   if (!/^20[0-2][0-9]$/.test(year)) {
+      //     setErrorMessage('Please check the "Year" field for correctness! It should be between 2000 and 2019 inclusive.');
 
-          return;
-        }
+      //     return;
+      //   }
 
-        if (form.editingMode.state) {
-          const { index } = form.editingMode;
+      //   if (form.editingMode.state) {
+      //     const { index } = form.editingMode;
 
-          dispatch(addItemChanges({ index, name, author, image, album, genre, year, file }));
-        } else {
-          dispatch(addItem({ name, author, image, album, genre, year, file }))
-        }
+      //     dispatch(addItemChanges({ index, name, author, image, album, genre, year, file }));
+      //   } else {
+      //     dispatch(addItem({ name, author, image, album, genre, year, file }))
+      //   }
 
-        dispatch(completeOperation());
-        setErrorMessage('');
-      }}
+      //   dispatch(completeOperation());
+      // }}
 
       onReset={(event) => {
-        event.preventDefault();
+        reset();
 
         dispatch(completeOperation());
       }}
@@ -137,10 +160,9 @@ export default function AdminForm() {
           <FormControl required>
             <InputLabel htmlFor="name">Name</InputLabel>
             <Input
+              {...register("name", { required: true })}
               id="name"
-              name="name"
               value={form.name}
-              onChange={handleInputChange}
               placeholder="The Simpsons"
             />
           </FormControl>
@@ -149,10 +171,9 @@ export default function AdminForm() {
           <FormControl required>
             <InputLabel htmlFor="author">Author</InputLabel>
             <Input
+              {...register("author", { required: true })}
               id="author"
-              name="author"
               value={form.author}
-              onChange={handleInputChange}
               placeholder="Matt Groening"
             />
           </FormControl>
@@ -161,10 +182,9 @@ export default function AdminForm() {
           <FormControl required>
             <InputLabel htmlFor="image">Image</InputLabel>
             <Input
+              {...register("image", { required: true, pattern: /^(https?:\/\/)?[0-9a-z-_]*(\.[0-9a-z-_]+)*(\.[a-z]+)+(\/[0-9a-z-_]*)*?\/?$/i })}
               id="image"
-              name="image"
               value={form.image}
-              onChange={handleInputChange}
               placeholder="https://picsum.photos/"
             />
           </FormControl>
@@ -173,10 +193,9 @@ export default function AdminForm() {
           <FormControl required>
             <InputLabel htmlFor="album">Album / Category</InputLabel>
             <Input
+              {...register("album", { required: true })}
               id="album"
-              name="album"
               value={form.album}
-              onChange={handleInputChange}
               placeholder="Health"
             />
           </FormControl>
@@ -185,10 +204,9 @@ export default function AdminForm() {
           <FormControl required>
             <InputLabel htmlFor="genre">Genre</InputLabel>
             <Input
+              {...register("genre", { required: true })}
               id="genre"
-              name="genre"
               value={form.genre}
-              onChange={handleInputChange}
               placeholder="Science fiction"
             />
           </FormControl>
@@ -197,10 +215,9 @@ export default function AdminForm() {
           <FormControl required>
             <InputLabel htmlFor="year">Release year</InputLabel>
             <Input
+              {...register("year", { required: true, pattern: /^19\d{2}$|^20[01][0-9]$|^202[0-3]$/ })}
               id="year"
-              name="year"
               value={form.year}
-              onChange={handleInputChange}
               placeholder="2000"
             />
           </FormControl>
@@ -210,8 +227,8 @@ export default function AdminForm() {
             File upload
             <input
               hidden
+              {...register("file", { onChange: handleInputFileChange })}
               type="file"
-              name="file"
               onChange={handleInputFileChange}
             />
           </Button>
