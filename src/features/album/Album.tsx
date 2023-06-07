@@ -57,8 +57,8 @@ export default function Album() {
         <Container sx={{ py: 8 }} maxWidth="md">
           {/* End hero unit */}
           <AdminForm />
-          {/* <FiltrationForm /> */}
-          {/* <Recommendations /> */}
+          <FiltrationForm />
+          <Recommendations />
           {/* <SearchBar /> */}
           <Tile />
         </Container>
