@@ -1,23 +1,27 @@
 import { configureStore } from '@reduxjs/toolkit';
-import AdminFormSlice from '../features/forms/adminForm/adminFormSlice';
-import FiltrationForm from '../features/forms/filtrationForm/filtrationFormSlice';
-import searchBarSlice from '../features/forms/searchBar/searchBarSlice';
-import recommendationsSlice from '../features/forms/recommendations/recommendationsSlice';
-import tileSlice from '../features/tile/tileSlice';
-import signInFormSlice from '../features/forms/auth/signInForm/signInFormSlice';
-
-const reducer = {
-  adminForm: AdminFormSlice,
-  search: searchBarSlice,
-  filtrationForm: FiltrationForm,
-  recommendations: recommendationsSlice,
-  list: tileSlice,
-  users: signInFormSlice,
-};
+import accountReducer from '@/features/account/accountSlice';
+import { accountAPI } from './services/accountService';
+import AdminFormSlice from '@/components/forms/adminForm/adminFormSlice';
+import FiltrationForm from '@/components/forms/filtrationForm/filtrationFormSlice';
+import searchBarSlice from '@/components/forms/searchBar/searchBarSlice';
+import recommendationsSlice from '@/components/forms/recommendations/recommendationsSlice';
+import tileSlice from '@/components/tile/tileSlice';
+import signInFormSlice from '@/components/forms/auth/signInForm/signInFormSlice';
 
 export const store = configureStore({
-  reducer
-});
+  reducer: {
+    account: accountReducer,
+    adminForm: AdminFormSlice,
+    search: searchBarSlice,
+    filtrationForm: FiltrationForm,
+    recommendations: recommendationsSlice,
+    list: tileSlice,
+    users: signInFormSlice,
+    [accountAPI.reducerPath]: accountAPI.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(accountAPI.middleware),
+})
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
