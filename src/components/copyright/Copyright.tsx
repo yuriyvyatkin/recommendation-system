@@ -9,7 +9,6 @@ export default function Copyright(props: any) {
         Yuriy Vyatkin Website
       </Link>{' '}
       {new Date().getFullYear()}
-      {'.'}
     </Typography>
   );
 }

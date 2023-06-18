@@ -17,7 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '@/components/copyright/Copyright';
 import {
   addUser
-} from '@/components/forms/auth/signInForm/signInFormSlice';
+} from '@/pages/loginPage/loginPageSlice';
 import CustomAlert from '@/components/forms/customAlert/CustomAlert';
 import { useAppDispatch } from '@/app/hooks';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -59,7 +59,7 @@ export default function SignUpForm() {
 
     for (const fieldName in errors) {
       Object.defineProperty(errorMessages, fieldName, {
-        value: (<CustomAlert name={fieldName} type={errors[fieldName as keyof typeof errors]?.type as string} />),
+        value: (<CustomAlert fieldName={fieldName} type={errors[fieldName as keyof typeof errors]?.type as string} />),
       });
     }
   }

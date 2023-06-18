@@ -6,7 +6,7 @@ import FiltrationForm from '@/components/forms/filtrationForm/filtrationFormSlic
 import searchBarSlice from '@/components/forms/searchBar/searchBarSlice';
 import recommendationsSlice from '@/components/forms/recommendations/recommendationsSlice';
 import tileSlice from '@/components/tile/tileSlice';
-import signInFormSlice from '@/components/forms/auth/signInForm/signInFormSlice';
+import signInFormSlice from '@/pages/loginPage/loginPageSlice';
 
 export const store = configureStore({
   reducer: {

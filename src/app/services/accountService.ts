@@ -9,7 +9,7 @@ type Store = {
 export const accountAPI = createApi({
   reducerPath: 'accountAPI',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://jwt-user-auth-backend.onrender.com',
+    baseUrl: import.meta.env.VITE_API_URL,
     prepareHeaders: (headers: Headers, { getState }) => {
       const store = getState() as Store;
       const token = store.account.userToken;

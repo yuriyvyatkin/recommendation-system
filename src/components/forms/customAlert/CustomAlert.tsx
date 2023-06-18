@@ -2,31 +2,28 @@ import Alert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
 import getCapitalizedWord from "@/utils/getCapitalizedWord";
 
-export default function CustomAlert({ name, type }: { name: string | undefined, type: string }) {
-  let alertName = type;
-  let capitalizedName = getCapitalizedWord(name);
+export default function CustomAlert({ fieldName, type, children }: { fieldName?: string, type?: string, children?: string }) {
+  let alertName = children;
+  let capFieldName = getCapitalizedWord(fieldName);
 
   switch (type) {
     case 'required':
-      alertName = `Required field "${capitalizedName}" is missing!`;
+      alertName = `Required field "${capFieldName}" is missing!`;
       break;
     case 'maxLength':
-      alertName = `${capitalizedName} is too long!`;
+      alertName = `${capFieldName} is too long!`;
       break;
     case 'minLength':
-      alertName = `${capitalizedName} is too short!`;
+      alertName = `${capFieldName} is too short!`;
       break;
     case 'max':
-      alertName = `${capitalizedName} exceeds the maximum limit!`;
+      alertName = `${capFieldName} exceeds the maximum limit!`;
       break;
     case 'min':
-      alertName = `${capitalizedName} below the minimum limit!`;
+      alertName = `${capFieldName} below the minimum limit!`;
       break;
     case 'pattern':
-      alertName = `${capitalizedName} format is incorrect!`;
-      break;
-    default:
-      alertName = 'Unknown error!';
+      alertName = `${capFieldName} format is incorrect!`;
       break;
   }
 

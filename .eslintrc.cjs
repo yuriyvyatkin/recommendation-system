@@ -65,6 +65,5 @@ module.exports = {
     'no-plusplus': 'off',
     'no-param-reassign': 'off',
     'no-unused-vars': 'off',
-    'react/react-in-jsx-scope': 'off',
   },
 };

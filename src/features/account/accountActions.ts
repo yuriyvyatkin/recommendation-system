@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const backendURL = 'https://jwt-user-auth-backend.onrender.com';
+const backendURL = import.meta.env.VITE_API_URL;
 
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded';
