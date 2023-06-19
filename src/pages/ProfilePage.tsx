@@ -6,10 +6,10 @@ const ProfilePage = () => {
 
   let name = 'Unknown user';
 
-  if (userInfo && userInfo.firstName) {
+  if (userInfo && userInfo.name) {
     name =
-      userInfo.firstName.charAt(0).toUpperCase() +
-      userInfo.firstName.substring(1);
+      userInfo.name.charAt(0).toUpperCase() +
+      userInfo.name.substring(1);
   }
 
   return (

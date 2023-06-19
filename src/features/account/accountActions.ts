@@ -10,10 +10,12 @@ export const registerUser = createAsyncThunk(
   'account/registerUser',
   async (
     {
-      firstName,
+      name,
+      age,
+      gender,
       email,
       password,
-    }: { firstName: string; email: string; password: string },
+    }: { name: string; age: string; gender: string; email: string; password: string },
     { rejectWithValue },
   ) => {
     try {
@@ -26,7 +28,7 @@ export const registerUser = createAsyncThunk(
 
       await axios.post(
         `${backendURL}/api/user/register`,
-        { firstName, email, password },
+        { name, age, gender, email, password },
         config,
       );
     } catch (error: any) {

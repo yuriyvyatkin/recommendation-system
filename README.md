@@ -4,7 +4,7 @@
 
 **🛠️ Стек**
 
-JavaScript + React + Redux Toolkit + React Router + Mui + Axios + Faker + ESLint + Prettier + Vite + PNPM
+React + Redux Toolkit + Redux Thunk + TypeScript + React Router + Mui + Axios + Faker + ESLint + Prettier + Vite + PNPM
 
 
 **🚀 Основная информация**

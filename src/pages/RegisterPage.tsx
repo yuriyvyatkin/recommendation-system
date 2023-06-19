@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 type FormValues = {
-  firstName: string;
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -20,7 +20,7 @@ const RegisterPage = () => {
   const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm<FormValues>({
     defaultValues: {
-      firstName: 'abc',
+      name: 'abc',
       email: 'abc@mail.ru',
       password: '123',
       confirmPassword: '123',
@@ -49,11 +49,11 @@ const RegisterPage = () => {
     <form onSubmit={handleSubmit(submitForm)}>
       {error && <Error>{error}</Error>}
       <div className="form-group">
-        <label htmlFor="firstName">First Name</label>
+        <label htmlFor="name">First Name</label>
         <input
           type="text"
           className="form-input"
-          {...register('firstName')}
+          {...register('name')}
           required
         />
       </div>

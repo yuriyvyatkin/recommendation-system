@@ -7,6 +7,31 @@ import {
 function AppThemeProvider({ children }) {
   const theme = responsiveFontSizes(
     createTheme({
+      components: {
+        MuiTextField: {
+          styleOverrides: {
+            root: {
+              '& .MuiFormHelperText-root': {
+                color: 'gray',
+              },
+            },
+          },
+        },
+        MuiAvatar: {
+          styleOverrides: {
+            root: {
+              backgroundColor: '#1976d2',
+            },
+          },
+        },
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              textTransform: 'none',
+            },
+          },
+        },
+      },
       // palette: {
       //   primary: {
       //     main: '#DD3333',
@@ -19,10 +44,6 @@ function AppThemeProvider({ children }) {
       //     silver: 'linear-gradient(180deg, #808080 0%, #DFDFDF 100%)',
       //     gold: 'linear-gradient(180deg, #A3873C 0%, #E3D294 100%)',
       //   },
-      // },
-      // text: {
-      //   disabled: '#C3C1BD',
-      //   secondary: '#999999',
       // },
       // typography: {
       //   fontFamily: 'Lato, sans-serif',

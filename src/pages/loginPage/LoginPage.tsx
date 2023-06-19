@@ -17,18 +17,21 @@ import { useNavigate } from 'react-router-dom';
 type FormValues = {
   email: string;
   password: string;
-  remember: boolean;
-}
+};
 
 export default function LoginPage() {
-  const { register, handleSubmit, reset, setError, formState: { errors } } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
     defaultValues: {
       email: 'abc@mail.ru',
-      password: '123',
-      remember: false,
+      password: '123123Qq',
     },
   });
-  const { loading, error, authorized, userToken, userInfo } = useAppSelector(
+  const { loading, error, authorized } = useAppSelector(
     (store) => store.account,
   );
   const dispatch = useAppDispatch();
@@ -36,12 +39,14 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (authorized) {
-      navigate('/user-profile')
-    };
+      navigate('/user-profile');
+    }
   }, [navigate, loading, authorized]);
 
   const submitForm: SubmitHandler<FormValues> = (data) => {
     dispatch(logInUser(data));
+
+    reset();
   };
 
   const errorMessages = {
@@ -52,74 +57,95 @@ export default function LoginPage() {
   if (errors) {
     for (const fieldName in errors) {
       Object.defineProperty(errorMessages, fieldName, {
-        value: (<CustomAlert fieldName={fieldName} type={errors[fieldName as keyof typeof errors]?.type as string} />),
+        value: (
+          <CustomAlert
+            type={errors[fieldName as keyof typeof errors]?.type as string}
+          />
+        ),
       });
     }
   }
 
   return (
-      <Container component="main" maxWidth="xs" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          mb: 2,
+        }}
+      >
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
         <Box
+          component="form"
+          onSubmit={handleSubmit(submitForm)}
+          noValidate
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            mb: 2,
+            mt: -2,
           }}
         >
-          <Avatar sx={{ bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate>
-            <Grid container>
-              <Grid item xs={12}>
-                <TextField
-                  {...register("email", { required: true, minLength: 7, maxLength: 80, pattern: /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i })}
-                  required
-                  margin="normal"
-                  fullWidth
-                  label="Email"
-                  autoComplete="email"
-                  autoFocus
-                />
-              </Grid>
-              {errorMessages.email}
-              <Grid item xs={12}>
-                <TextField
-                  {...register("password", { required: true, minLength: 3, maxLength: 16 })}
-                  required
-                  margin="normal"
-                  fullWidth
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                />
-              </Grid>
-              {errorMessages.password}
+          <Grid container>
+            <Grid item xs={12}>
+              <TextField
+                {...register('email', {
+                  required: true,
+                  minLength: 7,
+                  maxLength: 80,
+                  pattern:
+                    /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i,
+                })}
+                required
+                margin="normal"
+                fullWidth
+                label="Почта"
+                autoComplete="email"
+                autoFocus
+              />
             </Grid>
-            {error && <Box sx={{ mt: 1 }}><CustomAlert>123</CustomAlert></Box>}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              {loading ? <CircularProgress color="inherit" /> : 'Login'}
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+            {errorMessages.email}
+            <Grid item xs={12}>
+              <TextField
+                {...register('password', {
+                  required: true,
+                  minLength: 7,
+                  maxLength: 16,
+                  pattern: /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/,
+                })}
+                required
+                margin="normal"
+                fullWidth
+                label="Пароль"
+                type="password"
+                autoComplete="current-password"
+              />
             </Grid>
-          </Box>
+            {errorMessages.password}
+          </Grid>
+          {error && (
+            <Box sx={{ mt: 1 }}>
+              <CustomAlert>{error}</CustomAlert>
+            </Box>
+          )}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            {loading ? <CircularProgress color="inherit" /> : 'Войти'}
+          </Button>
+          <Grid container>
+            <Grid item>
+              <Link href="/register" variant="body2">
+                {'Нет аккаунта? Зарегистрироваться'}
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
-      </Container>
+      </Box>
+    </Container>
   );
 }

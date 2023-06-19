@@ -6,7 +6,9 @@ const isUserToken = Boolean(userToken);
 
 type UserInfo = {
   id: string;
-  firstName: string;
+  name: string;
+  age: number;
+  gender: string;
   email: string;
   password: string;
 };
